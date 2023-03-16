@@ -26,7 +26,6 @@ if (config.runsInWidget) {
 // create widget
 function createWidget() {
   let w = new ListWidget();
-  w.backgroundColor = new Color("#1A1A1A");
 
   // shows if server if online
   if (res.online) {
@@ -34,7 +33,7 @@ function createWidget() {
   } else {
     w = serverOffline(w);
   }
-
+  
   return w;
 }
 
