@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>mcsrvstat</title>
+
+</head>
+
+<body>
+
+    <h1>Mc Server Info</h1>
+
+    <input type="text" id="input">
+    <button onclick="ServerInfo()"> Send </button>
+
+    <p id="w"> 🔴Server is Offline :( </p>
+
+    <Script>
+        function ServerInfo() {
+            let serverIp = document.getElementById("input").value;
+            if (serverIp == "") {
+                return;
+            }
+            console.log(serverIp);
+
+            let url = "https://api.mcsrvstat.us/2/" + serverIp;
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.onload = function () {
+                let resTxt = JSON.parse(this.response);
+
+                let result;
+
+                if (resTxt["online"]) {
+                    result = serverOnline(resTxt);
+                } else {
+                    result = serverOffline(resTxt);
+                }
+                document.getElementById("w").innerHTML = result;
+            };
+            document.getElementById("w").innerHTML = "loading..." + serverIp;
+            xhr.send();
+
+            function serverOnline(resTxt) {
+
+                let playersOn = resTxt.players["online"];
+                let playersMax = resTxt.players["max"];
+                let version = resTxt["version"];
+                let players = "";
+                if (playersOn != 0) {
+                    players = resTxt.players["list"].join(", ");
+                }
+
+                return (
+                    "🟢 Online" +
+                    "<br> V: " +
+                    version +
+                    "<br>" +
+                    playersOn +
+                    " von " +
+                    playersMax +
+                    " online:" +
+                    "<br>" +
+                    players +
+                    "<br>"
+                );
+            };
+
+            function serverOffline(resTxt) {
+                return "🔴Server is Offline :(";
+            };
+        };
+
+    </Script>
+
+</body>
+
+</html>
