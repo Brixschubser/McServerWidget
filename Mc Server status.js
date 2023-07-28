@@ -1,6 +1,6 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: red; icon-glyph: magic;
+// icon-color: orange; icon-glyph: magic;
 // change the serverIp to a full McServer Ip to show infos in widget
 let serverIp = "";
 // set needed vars
