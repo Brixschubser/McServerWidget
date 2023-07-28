@@ -1,21 +1,22 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: pink; icon-glyph: magic;
-// change the serverIp to a full mcserver adress to show infos in widget
+// icon-color: red; icon-glyph: magic;
+// change the serverIp to a full McServer Ip to show infos in widget
 let serverIp = "";
 // set needed vars
 let url = "https://api.mcsrvstat.us/2/" + serverIp;
-console.log("hi");
+console.log(url);
 let req = new Request(url);
 let res = await req.loadJSON();
 // let res = JSON.parse(testJson());
-let widget = createWidget();
 
 // create widget
 if (config.runsInWidget) {
+  let widget = createWidget();
   Script.setWidget(widget);
   Script.complete();
 } else if (config.runsInApp) {
+  let widget = createWidget();
   widget.presentLarge();
   Script.complete();
 } else {
@@ -25,72 +26,88 @@ if (config.runsInWidget) {
 
 // create widget
 function createWidget() {
-  let w = new ListWidget();
-
+  let widget = new ListWidget();
   // shows if server if online
   if (res.online) {
-    w = serverOnline(w);
+    widget = serverOnline(widget);
   } else {
-    w = serverOffline(w);
+    widget = serverOffline(widget);
   }
-  
-  return w;
+  return widget;
 }
 
-function serverOnline(w) {
-  let title = w.addText("🟢 Online");
-  title.font = Font.heavyRoundedSystemFont(34);
+function sizes() {
+  let sizes = [34, 20, 18, 12];
+  switch (config.widgetFamily) {
+    case "small":
+      sizes = [16, 12, 12, 7];
+      break;
+    case "medium":
+      sizes = [20, 14, 12, 10];
+      break;
+    case "large":
+      sizes = [34, 20, 18, 12];
+      break;
+    case "extraLarge":
+      sizes = [34, 20, 18, 12];
+      break;
+    }
+  return sizes;
+}
 
-  let version = w.addText("V: " + res.version);
-  version.font = Font.blackRoundedSystemFont(20);
+function serverOnline(widget) {
+  const textSize = sizes();
+  let title = widget.addText("🟢 Online");
+  title.font = Font.heavyRoundedSystemFont(textSize[0]);
 
-  w.addSpacer(3);
+  let version = widget.addText("V: " + res.version);
+  version.font = Font.blackRoundedSystemFont(textSize[1]);
 
   // shows amount of players and player names
-  let players = w.addText(
+  let players = widget.addText(
     res.players.online + " von " + res.players.max + " online:"
   );
-  players.font = Font.blackRoundedSystemFont(20);
+  players.font = Font.blackRoundedSystemFont(textSize[1]);
   if (res.players.online != 0) {
-    let playerLs = w.addText(res.players.list.join(", "));
-    playerLs.font = Font.lightRoundedSystemFont(20);
+    let playerLs = widget.addText(res.players.list.join(", "));
+    playerLs.font = Font.lightRoundedSystemFont(textSize[2]);
   }
 
-  w.addSpacer();
+  widget.addSpacer();
 
-  let date = w.addText(addDateTime());
-  date.font = Font.mediumMonospacedSystemFont(12);
+  let date = widget.addText(addDateTime());
+  date.font = Font.mediumMonospacedSystemFont(textSize[3]);
 
-  w.addSpacer(3);
-  w.setPadding(5, 5, 5, 5);
-  return w;
+  widget.addSpacer(3);
+  widget.setPadding(5, 5, 5, 5);
+  return widget;
 }
 
-function serverOffline(w) {
+function serverOffline(widget) {
   let status = "🔴Server is Offline :(";
-  w.addSpacer();
-  w.addText(status);
-  w.addSpacer();
-  w.setPadding(5, 5, 5, 5);
-  return w;
+  widget.addSpacer();
+  widget.addText(status);
+  widget.addSpacer();
+  widget.setPadding(5, 5, 5, 5);
+  return widget;
 }
 
 function addDateTime() {
-  let currentdate = new Date();
-  let datetime =
+  let currentDate = new Date();
+  let dateTime =
     "Last Sync: " +
-    currentdate.getDate() +
+    currentDate.getDate() +
     "/" +
-    (currentdate.getMonth() + 1) +
+    (currentDate.getMonth() + 1) +
     "/" +
-    currentdate.getFullYear() +
+    currentDate.getFullYear() +
     " @ " +
-    currentdate.getHours() +
+    currentDate.getHours() +
     ":" +
-    currentdate.getMinutes() +
+    currentDate.getMinutes() +
     ":" +
-    currentdate.getSeconds();
-  return datetime;
+    currentDate.getSeconds();
+  return dateTime;
 }
 
 function testJson() {
