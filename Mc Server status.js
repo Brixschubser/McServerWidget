@@ -36,6 +36,7 @@ function createWidget() {
   return widget;
 }
 
+// returns text sizes for different widget sizes
 function sizes() {
   let sizes = [34, 20, 18, 12];
   switch (config.widgetFamily) {
@@ -51,10 +52,11 @@ function sizes() {
     case "extraLarge":
       sizes = [34, 20, 18, 12];
       break;
-    }
+  }
   return sizes;
 }
 
+// creates the widget layout and text if server is online
 function serverOnline(widget) {
   const textSize = sizes();
   let title = widget.addText("🟢 Online");
@@ -83,15 +85,19 @@ function serverOnline(widget) {
   return widget;
 }
 
+// creates the widget layout and text if server is offline
 function serverOffline(widget) {
-  let status = "🔴Server is Offline :(";
+  let textSize = sizes();
+  let statusText = "🔴Server is Offline :(";
   widget.addSpacer();
-  widget.addText(status);
+  let status = widget.addText(statusText);
+  status.font = Font.mediumMonospacedSystemFont(textSize[0]);
   widget.addSpacer();
   widget.setPadding(5, 5, 5, 5);
   return widget;
 }
 
+// formation of a time stamp on the bottom of the widget
 function addDateTime() {
   let currentDate = new Date();
   let dateTime =
@@ -110,6 +116,7 @@ function addDateTime() {
   return dateTime;
 }
 
+// loads a json file to test script with no server
 function testJson() {
   let fm = FileManager.iCloud();
   let settingsFilename = "test.json";
