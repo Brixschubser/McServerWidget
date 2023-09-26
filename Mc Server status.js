@@ -38,20 +38,26 @@ function createWidget() {
 
 // returns text sizes for different widget sizes
 function sizes() {
-  let sizes = [34, 20, 18, 12];
-  switch (config.widgetFamily) {
-    case "small":
-      sizes = [16, 12, 12, 7];
-      break;
-    case "medium":
-      sizes = [20, 14, 12, 10];
-      break;
-    case "large":
-      sizes = [34, 20, 18, 12];
-      break;
-    case "extraLarge":
-      sizes = [34, 20, 18, 12];
-      break;
+  let sizes = [16, 12, 12, 7];
+  if (config.runsInApp) {
+    sizes = [33, 20, 18, 12];
+  } else if (config.runsInWidget) {
+    switch (config.widgetFamily) {
+      case "small":
+        sizes = [16, 12, 12, 7];
+        break;
+      case "medium":
+        sizes = [20, 14, 12, 10];
+        break;
+      case "large":
+        sizes = [33, 20, 18, 12];
+        break;
+      case "extraLarge":
+        sizes = [33, 20, 18, 12];
+        break;
+      default:
+        sizes = [9, 6, 5, 4];
+    }
   }
   return sizes;
 }
@@ -80,7 +86,7 @@ function serverOnline(widget) {
   let date = widget.addText(addDateTime());
   date.font = Font.mediumMonospacedSystemFont(textSize[3]);
 
-  widget.addSpacer(3);
+  widget.addSpacer(2);
   widget.setPadding(5, 5, 5, 5);
   return widget;
 }
