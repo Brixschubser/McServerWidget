@@ -2,7 +2,7 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: server;
 // change the serverIp to a full McServer Ip to show infos in widget
-let serverIp = "";
+let serverIp = args.widgetParameter || "";
 // set needed vars
 let url = "https://api.mcsrvstat.us/2/" + serverIp;
 console.log(url);
@@ -56,7 +56,7 @@ function sizes() {
         sizes = [33, 20, 18, 12];
         break;
       default:
-        sizes = [9, 6, 5, 4];
+        sizes = [9, 6, 6, 4];
     }
   }
   return sizes;
@@ -76,11 +76,12 @@ function serverOnline(widget) {
     res.players.online + " von " + res.players.max + " online:"
   );
   players.font = Font.blackRoundedSystemFont(textSize[1]);
-  if (res.players.online != 0) {
-    let playerLs = widget.addText(res.players.list.join(", "));
-    playerLs.font = Font.lightRoundedSystemFont(textSize[2]);
-  }
-
+  try {
+    if (res.players.online != 0) {
+      let playerLs = widget.addText(res.players.list.join(", "));
+      playerLs.font = Font.lightRoundedSystemFont(textSize[2]);
+    }
+  } catch (e) {}
   widget.addSpacer();
 
   let date = widget.addText(addDateTime());
